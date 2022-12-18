@@ -28,4 +28,14 @@
     <string name="new_product">新品推荐</string>
     <string name="popular">最近流行</string>
     <string name="product_list">商品列表</string>
+    <string name="cart">购物车</string>
+    <string name="total">合计</string>
+    <string name="total_price">￥39.9</string>
+    <string name="price">价格</string>
+    <string name="discount">优惠</string>
+    <string name="discount_price">￥0.0</string>
+    <string name="settlement">结算</string>
+    <string name="backhome">返回首页</string>
+    <string name="back_home">返回首页</string>
+    <string name="successfully_ordered">下单成功</string>
 </resources>

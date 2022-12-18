@@ -11,10 +11,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Objects;
 import edu.eschina.market.R;
 import edu.eschina.market.activity.ProductDetailsActivity;
 import edu.eschina.market.activity.ProductListActivity;
+import edu.eschina.market.activity.ShoppingCartActivity;
 import edu.eschina.market.adapter.ProductAdapter;
 import edu.eschina.market.databinding.FragmentHomeBinding;
 import edu.eschina.market.model.Commodity;
@@ -24,12 +24,10 @@ import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-
 public class HomeFragment extends BaseViewModelFragment<FragmentHomeBinding> {
-//    private ImageView actionCart;
+    private ImageView actionCart;
     private ArrayList<Commodity> commodityList;
     private ArrayList<Commodity> commodityList2;
-
     public static HomeFragment newInstance() {
         Bundle args = new Bundle();
         HomeFragment fragment = new HomeFragment();
@@ -40,7 +38,7 @@ public class HomeFragment extends BaseViewModelFragment<FragmentHomeBinding> {
     @Override
     protected void initView() {
         super.initView();
-//        actionCart = getActivity().findViewById(R.id.cart);
+        actionCart = getActivity().findViewById(R.id.action_cart);
     }
 
     @Override
@@ -54,6 +52,7 @@ public class HomeFragment extends BaseViewModelFragment<FragmentHomeBinding> {
                 .url(Config.ENDPOINT + "/product/list/?indexType=1")
                 .get()
                 .build();
+
         new OkHttpClient().newCall(request)
                 .enqueue(new Callback() {
                     @Override
@@ -76,7 +75,7 @@ public class HomeFragment extends BaseViewModelFragment<FragmentHomeBinding> {
                                         data.getJSONObject(i).getString("pic")
                                 ));
                             }
-                            Objects.requireNonNull(getActivity()).runOnUiThread(() -> {
+                            requireActivity().runOnUiThread(() -> {
                                 viewBinding.gvNew.setAdapter(new ProductAdapter(getContext(), commodityList));
                                 viewBinding.gvNew.setSelection(0);
                             });
@@ -113,7 +112,7 @@ public class HomeFragment extends BaseViewModelFragment<FragmentHomeBinding> {
                                         data.getJSONObject(i).getString("pic")
                                 ));
                             }
-                            Objects.requireNonNull(getActivity()).runOnUiThread(() -> {
+                            requireActivity().runOnUiThread(() -> {
                                 viewBinding.gvPopular.setAdapter(new ProductAdapter(getContext(), commodityList2));
                                 viewBinding.gvPopular.setSelection(0);
                             });
@@ -162,5 +161,7 @@ public class HomeFragment extends BaseViewModelFragment<FragmentHomeBinding> {
                 startActivity(intent);
             }
         });
+
+      actionCart.setOnClickListener(v -> startActivity(new Intent(getActivity(), ShoppingCartActivity.class)));
     }
 }

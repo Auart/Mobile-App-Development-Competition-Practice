@@ -16,7 +16,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import static android.widget.Toast.LENGTH_SHORT;
-
 public class RegisterActivity extends BaseViewModelActivity<ActivityRegisterBinding> {
 
     private static final String TAG = "LoginActivity";

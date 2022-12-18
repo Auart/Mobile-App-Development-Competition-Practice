@@ -1,4 +1,5 @@
 package edu.eschina.market.adapter;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
@@ -16,13 +17,12 @@ import edu.eschina.market.R;
 import edu.eschina.market.model.Commodity;
 import edu.eschina.market.utils.Config;
 import edu.eschina.market.utils.LoadImageTask;
-
-public class ProductAdapter extends BaseAdapter {
+public class ShoppingCartAdapter extends BaseAdapter {
     private Context context;
 
     private ArrayList<Commodity> commodityList;
 
-    public ProductAdapter(Context context, ArrayList<Commodity> commodityList) {
+    public ShoppingCartAdapter(Context context, ArrayList<Commodity> commodityList) {
         this.context = context;
         this.commodityList = commodityList;
     }
@@ -48,7 +48,7 @@ public class ProductAdapter extends BaseAdapter {
         ViewHolder viewHolder;
         if (convertView == null) {
             viewHolder = new ViewHolder();
-            convertView = LayoutInflater.from(context).inflate(R.layout.item_product, parent, false);
+            convertView = LayoutInflater.from(context).inflate(R.layout.item_shopping_cart, parent, false);
             viewHolder.productName = convertView.findViewById(R.id.product_name);
             viewHolder.productDesc = convertView.findViewById(R.id.product_description);
             viewHolder.productPrice = convertView.findViewById(R.id.product_price);

@@ -9,8 +9,6 @@ import android.widget.TextView;
 import java.util.List;
 import edu.eschina.market.R;
 import edu.eschina.market.model.Order;
-
-
 public class OrderAdapter extends BaseAdapter {
     private Context context;
     private List<Order> orderList;

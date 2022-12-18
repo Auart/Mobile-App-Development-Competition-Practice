@@ -55,24 +55,24 @@ public class LoginActivity extends BaseViewModelActivity<ActivityLoginBinding> {
                 .url(Config.ENDPOINT + "/user/login")
                 .post(formBody)
                 .build();
+        Log.e("req",request.toString());
         new OkHttpClient().newCall(request).enqueue(new Callback() {
 
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 Log.e(TAG, "服务器出错 " + e);
             }
-
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 String json = Objects.requireNonNull(response.body()).string();
                 try {
                     JSONObject jsonObject = new JSONObject(json);
-
                     Log.e(TAG, jsonObject.toString());
                     JSONObject data = jsonObject.getJSONObject("data");
                     JSONObject user = data.getJSONObject("user");
                     String id = user.getString("id");
-
+                    String nickName = user.getString("nickName");
+                    String headPic = user.getString("headPic");
                     String token = data.getString("auth_token");
                     runOnUiThread(() -> {
                         Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
@@ -82,6 +82,8 @@ public class LoginActivity extends BaseViewModelActivity<ActivityLoginBinding> {
                                 .putString("mobile", mobile)
                                 .putString("pwd", password)
                                 .putBoolean("isRemember", isRemember)
+                                .putString("nickName",nickName)
+                                .putString("headPic",headPic)
                                 .apply();
 
                     });
