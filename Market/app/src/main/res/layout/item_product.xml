@@ -14,6 +14,7 @@
        <ImageView
            android:id="@+id/product_icon"
            android:layout_width="160dp"
+           android:scaleType="fitXY"
            android:layout_height="160dp"
 
            android:src="@mipmap/loading" />
