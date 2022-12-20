@@ -41,31 +41,32 @@ public class ShoppingCartActivity extends BaseViewModelActivity<ActivityShopping
     protected void initData() {
         super.initData();
         ShoppingDBHelper shoppingDBHelper = new ShoppingDBHelper(this);
-        SQLiteDatabase readableDatabase = shoppingDBHelper.getReadableDatabase();
-        String sqlStr = "select * from shopping;";
-        Cursor cursor = readableDatabase.rawQuery(sqlStr, null);
-        // 创建用户对象的集合
-        commodityList = new ArrayList<>();
+        SQLiteDatabase db = shoppingDBHelper.getReadableDatabase();
 
-        // 遍历查询结果并将数据封装到用户对象中
-        while (cursor.moveToNext()) {
-            String id = cursor.getString(0);
-            String name = cursor.getString(1);
-            String description = cursor.getString(2);
-            String price = cursor.getString(3);
-            String pic = cursor.getString(4);
-            Commodity commodity = new Commodity(id, name, description, price, pic);
-            commodityList.add(commodity);
+        if(db.isOpen()){
+            Cursor cursor = db.rawQuery("select * from shopping;", null);
+            // 创建用户对象的集合
+            commodityList = new ArrayList<>();
+
+            // 遍历查询结果并将数据封装到用户对象中
+            while (cursor.moveToNext()) {
+                String id = cursor.getString(cursor.getColumnIndex("product_id"));
+                String name = cursor.getString(cursor.getColumnIndex("name"));
+                String description = cursor.getString(cursor.getColumnIndex("description"));
+                String price = cursor.getString(cursor.getColumnIndex("price"));
+                String pic = cursor.getString(cursor.getColumnIndex("pic"));
+                commodityList.add(new Commodity(id, name, description, price, pic));
+            }
+            // 关闭 Cursor 对象
+            cursor.close();
+            db.close();
         }
         ShoppingCartAdapter shoppingCartAdapter = new ShoppingCartAdapter(this, commodityList);
         viewBinding.cartList.setAdapter(shoppingCartAdapter);
         viewBinding.cartList.setSelection(0);
-        for (int i = 0; i < commodityList.size(); i++) {
-            commodityList.get(i).getProductPrice();
-        }
-        // 关闭 Cursor 对象
-        cursor.close();
-        readableDatabase.close();
+//        for (int i = 0; i < commodityList.size(); i++) {
+//            commodityList.get(i).getProductPrice();
+//        }
         totalPrice = 0;
         for (int i = 0; i < commodityList.size(); i++) {
             totalPrice += Double.parseDouble(commodityList.get(i).getProductPrice());
@@ -107,8 +108,7 @@ public class ShoppingCartActivity extends BaseViewModelActivity<ActivityShopping
             String json = jsonObject.toString().replaceAll("\\\\", "")
                     .replaceAll("\\}\"", "}")
                     .replaceAll("\"\\{", "{");
-            MediaType mediaType = MediaType.parse("application/json");
-            RequestBody body = RequestBody.create(mediaType, json);
+            RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
             Request request = new Request.Builder()
                     .url(Config.ENDPOINT + "/order/add")
                     .method("POST", body)

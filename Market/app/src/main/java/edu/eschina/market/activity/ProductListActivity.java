@@ -3,7 +3,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import java.util.ArrayList;
-import edu.eschina.market.adapter.ProductAdapter;
+import edu.eschina.market.adapter.ProductListAdapter;
 import edu.eschina.market.databinding.ActivityProductListBinding;
 import edu.eschina.market.model.Commodity;
 public class ProductListActivity  extends BaseViewModelActivity<ActivityProductListBinding> {
@@ -19,8 +19,8 @@ public class ProductListActivity  extends BaseViewModelActivity<ActivityProductL
     protected void initData() {
         super.initData();
         commodityList = (ArrayList<Commodity>) getIntent().getSerializableExtra("commodityList");
-        ProductAdapter productAdapter=new ProductAdapter(this, commodityList);
-        viewBinding.ltProductList.setAdapter(productAdapter);
+        ProductListAdapter productListAdapter=new ProductListAdapter(this, commodityList);
+        viewBinding.ltProductList.setAdapter(productListAdapter);
         viewBinding.ltProductList.setSelection(0);
     }
     @Override

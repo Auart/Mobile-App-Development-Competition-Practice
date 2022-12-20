@@ -2,6 +2,7 @@ package edu.eschina.market.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -19,6 +20,7 @@ import edu.eschina.market.adapter.ProductAdapter;
 import edu.eschina.market.databinding.FragmentHomeBinding;
 import edu.eschina.market.model.Commodity;
 import edu.eschina.market.utils.Config;
+import edu.eschina.market.utils.OkHttpWrapper;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -48,6 +50,51 @@ public class HomeFragment extends BaseViewModelFragment<FragmentHomeBinding> {
     }
 
     private void loadNetwork() {
+//        OkHttpWrapper okHttpWrapper=new OkHttpWrapper();
+//        try {
+//            String json = okHttpWrapper.get(Config.ENDPOINT + "/product/list/?indexType=1");
+//            Log.e("ok",json);
+//            commodityList= new ArrayList<>();
+//            JSONObject jsonObject=new JSONObject(json);
+//                JSONArray data = jsonObject.getJSONArray("data");
+//            Log.e("ok",data.toString());
+//                for (int i = 0; i < data.length(); i++) {
+//                    commodityList.add(new Commodity(
+//                            data.getJSONObject(i).getString("id"),
+//                            data.getJSONObject(i).getString("productName"),
+//                            data.getJSONObject(i).getString("description"),
+//                            data.getJSONObject(i).getString("price"),
+//                            data.getJSONObject(i).getString("pic")
+//                    ));
+//                }
+//                requireActivity().runOnUiThread(() -> {
+//                    viewBinding.gvNew.setAdapter(new ProductAdapter(getContext(), commodityList));
+//                    viewBinding.gvNew.setSelection(0);
+//                });
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        try {
+//            String json = okHttpWrapper.get(Config.ENDPOINT + "/product/list/?indexType=2");
+//            commodityList2 = new ArrayList<>();
+//            JSONObject jsonObject=new JSONObject(json);
+//            JSONArray data = jsonObject.getJSONArray("data");
+//            for (int i = 0; i < data.length(); i++) {
+//                commodityList2.add(new Commodity(
+//                        data.getJSONObject(i).getString("id"),
+//                        data.getJSONObject(i).getString("productName"),
+//                        data.getJSONObject(i).getString("description"),
+//                        data.getJSONObject(i).getString("price"),
+//                        data.getJSONObject(i).getString("pic")
+//                ));
+//            }
+//            requireActivity().runOnUiThread(() -> {
+//                viewBinding.gvNew.setAdapter(new ProductAdapter(getContext(), commodityList2));
+//                viewBinding.gvNew.setSelection(0);
+//            });
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
         Request request = new Request.Builder()
                 .url(Config.ENDPOINT + "/product/list/?indexType=1")
                 .get()

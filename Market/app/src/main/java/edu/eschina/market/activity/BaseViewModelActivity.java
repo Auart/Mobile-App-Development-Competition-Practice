@@ -9,7 +9,7 @@ public class BaseViewModelActivity<T extends ViewBinding> extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewBinding = ViewBindingUtils.getViewBinding(getLayoutInflater(), getClass());
+        viewBinding =  ViewBindingUtils.getViewBinding(getLayoutInflater(),getClass());
         setContentView(viewBinding.getRoot());
     }
 }

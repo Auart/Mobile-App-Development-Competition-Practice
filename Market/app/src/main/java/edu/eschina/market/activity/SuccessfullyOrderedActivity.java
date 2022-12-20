@@ -3,7 +3,6 @@ package edu.eschina.market.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import edu.eschina.market.databinding.ActivitySuccessfullyOrderedBinding;
-
 public class SuccessfullyOrderedActivity extends BaseViewModelActivity<ActivitySuccessfullyOrderedBinding> {
     @Override
     protected void initViews() {

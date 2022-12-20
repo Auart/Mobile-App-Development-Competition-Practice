@@ -6,13 +6,17 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
+
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.Objects;
+
 import edu.eschina.market.databinding.ActivityLoginBinding;
 import edu.eschina.market.utils.Config;
+import edu.eschina.market.utils.OkHttpWrapper;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -23,6 +27,7 @@ import okhttp3.Response;
 public class LoginActivity extends BaseViewModelActivity<ActivityLoginBinding> {
     private static final String TAG = "LoginActivity";
     private SharedPreferences userSharedPreferences;
+
     @SuppressLint("CommitPrefEdits")
     @Override
     protected void initData() {
@@ -47,6 +52,39 @@ public class LoginActivity extends BaseViewModelActivity<ActivityLoginBinding> {
         String mobile = viewBinding.inputMobile.getText().toString();
         String password = viewBinding.inputPassword.getText().toString();
         boolean isRemember = viewBinding.rememberPwd.isChecked();
+//        OkHttpWrapper okHttpWrapper = new OkHttpWrapper();
+//        FormBody formBody = new FormBody.Builder()
+//                .add("mobile", mobile)
+//                .add("pwd", password)
+//                .build();
+//        try {
+//            String json = okHttpWrapper.post(Config.ENDPOINT + "/user/login", formBody);
+//            JSONObject jsonObject = new JSONObject(json);
+//            Log.e(TAG, jsonObject.toString());
+//            JSONObject data = jsonObject.getJSONObject("data");
+//            JSONObject user = data.getJSONObject("user");
+//            String id = user.getString("id");
+//            String nickName = user.getString("nickName");
+//            String headPic = user.getString("headPic");
+//            String token = data.getString("auth_token");
+//            runOnUiThread(() -> {
+//                Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
+//                userSharedPreferences.edit()
+//                        .putString("auth_token", token)
+//                        .putString("id", id)
+//                        .putString("mobile", mobile)
+//                        .putString("pwd", password)
+//                        .putBoolean("isRemember", isRemember)
+//                        .putString("nickName", nickName)
+//                        .putString("headPic", headPic)
+//                        .apply();
+//            });
+//            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//            intent.putExtra("auth_token", token);
+//            startActivity(intent);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
         FormBody formBody = new FormBody.Builder()
                 .add("mobile", mobile)
                 .add("pwd", password)
@@ -90,6 +128,7 @@ public class LoginActivity extends BaseViewModelActivity<ActivityLoginBinding> {
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     intent.putExtra("auth_token", token);
                     startActivity(intent);
+                    finish();
                 } catch (JSONException e) {
                     runOnUiThread(() -> Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show());
                     e.printStackTrace();

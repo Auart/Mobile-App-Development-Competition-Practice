@@ -2,6 +2,7 @@ package edu.eschina.market.activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.view.LayoutInflater;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -12,6 +13,7 @@ import java.util.List;
 import edu.eschina.market.R;
 import edu.eschina.market.adapter.BottomNavigateAdapter;
 import edu.eschina.market.databinding.ActivityMainBinding;
+import edu.eschina.market.databinding.BottomNavLayoutBinding;
 import edu.eschina.market.fragment.HomeFragment;
 import edu.eschina.market.fragment.MeFragment;
 import edu.eschina.market.fragment.OrderFragment;
@@ -103,9 +105,9 @@ public class MainActivity extends BaseViewModelActivity<ActivityMainBinding> {
         resetColor();
         @SuppressLint("ResourceAsColor") Runnable[] runnable = {
                 () -> {
-                    ivHome.setSelected(true);
-                    tvHome.setTextColor(getResources().getColor(R.color.colorPrimary));
-                },
+            ivHome.setSelected(true);
+            tvHome.setTextColor(getResources().getColor(R.color.colorPrimary));
+        },
                 () -> {
                     ivOrder.setSelected(true);
                     tvOrder.setTextColor(getResources().getColor(R.color.colorPrimary));

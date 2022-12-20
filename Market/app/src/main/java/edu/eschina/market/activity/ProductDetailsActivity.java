@@ -45,10 +45,13 @@ public class ProductDetailsActivity extends BaseViewModelActivity<ActivityProduc
         //把指定商品添加到购物车
         viewBinding.addCart.setOnClickListener((v)->{
             ShoppingDBHelper shoppingDBHelper = new ShoppingDBHelper(this);
-            SQLiteDatabase writableDatabase = shoppingDBHelper.getWritableDatabase();
-            String sqlStr="replace into shopping (_id,name,description,price,pic) values (?,?,?,?,?);";
-            writableDatabase.execSQL(sqlStr,new Object[]{commodity.getId(),commodity.getProductName(),commodity.getDescription(),commodity.getProductPrice(),commodity.getProductImage()});
-            writableDatabase.close();
+            SQLiteDatabase db = shoppingDBHelper.getWritableDatabase();
+
+            if(db.isOpen()){
+                String sqlStr="replace into shopping (product_id,name,description,price,pic) values (?,?,?,?,?);";
+                db.execSQL(sqlStr,new Object[]{commodity.getId(),commodity.getProductName(),commodity.getDescription(),commodity.getProductPrice(),commodity.getProductImage()});
+                db.close();
+            }
             Toast.makeText(this,"成功添加到购物车",Toast.LENGTH_SHORT).show();
         });
     }
