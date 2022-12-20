@@ -61,12 +61,11 @@ public class ShoppingCartActivity extends BaseViewModelActivity<ActivityShopping
             cursor.close();
             db.close();
         }
+
+        //将数据展示到页面上
         ShoppingCartAdapter shoppingCartAdapter = new ShoppingCartAdapter(this, commodityList);
         viewBinding.cartList.setAdapter(shoppingCartAdapter);
         viewBinding.cartList.setSelection(0);
-//        for (int i = 0; i < commodityList.size(); i++) {
-//            commodityList.get(i).getProductPrice();
-//        }
         totalPrice = 0;
         for (int i = 0; i < commodityList.size(); i++) {
             totalPrice += Double.parseDouble(commodityList.get(i).getProductPrice());
@@ -133,9 +132,16 @@ public class ShoppingCartActivity extends BaseViewModelActivity<ActivityShopping
                             intent.putExtra("createTime", createTime);
                             startActivity(intent);
                         });
+                        ShoppingDBHelper shoppingDBHelper=new ShoppingDBHelper(ShoppingCartActivity.this);
+                        SQLiteDatabase db = shoppingDBHelper.getWritableDatabase();
+                        if(db.isOpen()){
+                            db.execSQL("delete from shopping");
+                            db.close();
+                        }
+                        totalPrice=0;
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        Toast.makeText(ShoppingCartActivity.this, "添加失败", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ShoppingCartActivity.this, "结算失败", Toast.LENGTH_SHORT).show();
                     }
                 }
             });

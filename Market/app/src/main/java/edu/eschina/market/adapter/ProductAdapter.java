@@ -60,14 +60,13 @@ public class ProductAdapter extends BaseAdapter {
         viewHolder.productName.setText(commodityList.get(position).getProductName());
         viewHolder.productDesc.setText(commodityList.get(position).getDescription());
         viewHolder.productPrice.setText("￥" + commodityList.get(position).getProductPrice());
-        // 加载本地图片并将其转换为 Bitmap 对象
         Log.e("url",Config.IMAGE_URL+commodityList.get(position).getProductImage());
 //        new LoadImageTask(viewHolder.productImage).execute(Config.IMAGE_URL+commodityList.get(position).getProductImage());
         Glide.with(convertView).load(Config.IMAGE_URL+commodityList.get(position).getProductImage()).into(viewHolder.productImage);
         return convertView;
     }
 
-    public final class ViewHolder {
+    public static final class ViewHolder {
         public ImageView productImage;
         public TextView productName;
         public TextView productDesc;
