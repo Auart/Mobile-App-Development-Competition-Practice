@@ -15,6 +15,8 @@ public class BaseActivity extends AppCompatActivity {
         initEvents();
     }
 
+
+
     protected void initViews(){
 
     }

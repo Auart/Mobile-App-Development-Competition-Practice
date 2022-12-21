@@ -7,7 +7,7 @@ public class SplashActivity extends BaseViewModelActivity<ActivitySplashBinding>
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewBinding.welcome.postDelayed(this::next,2000);
+        viewBinding.welcome.postDelayed(this::next,3000);
     }
 
     private void next() {
@@ -18,7 +18,6 @@ public class SplashActivity extends BaseViewModelActivity<ActivitySplashBinding>
     @Override
     protected void initViews() {
         super.initViews();
-
     }
 
     @Override

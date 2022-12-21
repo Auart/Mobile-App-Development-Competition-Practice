@@ -1,10 +1,17 @@
 package edu.eschina.market.fragment;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -12,24 +19,28 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
-import edu.eschina.market.R;
+
+import edu.eschina.market.activity.LoginActivity;
 import edu.eschina.market.activity.ProductDetailsActivity;
 import edu.eschina.market.activity.ProductListActivity;
 import edu.eschina.market.activity.ShoppingCartActivity;
 import edu.eschina.market.adapter.ProductAdapter;
+import edu.eschina.market.database.ShoppingDBHelper;
 import edu.eschina.market.databinding.FragmentHomeBinding;
 import edu.eschina.market.model.Commodity;
 import edu.eschina.market.utils.Config;
-import edu.eschina.market.utils.OkHttpWrapper;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 public class HomeFragment extends BaseViewModelFragment<FragmentHomeBinding> {
-    private ImageView actionCart;
     private ArrayList<Commodity> commodityList;
     private ArrayList<Commodity> commodityList2;
+    private SharedPreferences sharedPreferences;
+    private String auth_token;
+    private int count;
+
     public static HomeFragment newInstance() {
         Bundle args = new Bundle();
         HomeFragment fragment = new HomeFragment();
@@ -40,14 +51,35 @@ public class HomeFragment extends BaseViewModelFragment<FragmentHomeBinding> {
     @Override
     protected void initView() {
         super.initView();
-        actionCart = getActivity().findViewById(R.id.action_cart);
+
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        ShoppingDBHelper shoppingDBHelper=new ShoppingDBHelper(getActivity());
+        SQLiteDatabase db = shoppingDBHelper.getReadableDatabase();
+        if(db.isOpen()){
+            Cursor cursor = db.rawQuery("select count(*) from shopping; ", null);
+            while (cursor.moveToNext()){
+                count = cursor.getInt(0);
+                Log.e("sql",String.valueOf(count));
+            }
+            cursor.close();
+            db.close();
+        }
+        viewBinding.toolbar.cartCount.setText(String.valueOf(count));
     }
 
     @Override
     protected void initData() {
         super.initData();
+        sharedPreferences = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
+        auth_token = sharedPreferences.getString("auth_token", null);
         loadNetwork();
+
+
     }
+
 
     private void loadNetwork() {
 //        OkHttpWrapper okHttpWrapper=new OkHttpWrapper();
@@ -171,6 +203,8 @@ public class HomeFragment extends BaseViewModelFragment<FragmentHomeBinding> {
                 });
     }
 
+
+
     @Override
     protected void initEvents() {
         super.initEvents();
@@ -209,6 +243,28 @@ public class HomeFragment extends BaseViewModelFragment<FragmentHomeBinding> {
             }
         });
 
-      actionCart.setOnClickListener(v -> startActivity(new Intent(getActivity(), ShoppingCartActivity.class)));
+      viewBinding.toolbar.actionCart.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+              if(auth_token==null){
+                  AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                  builder.setMessage("你还没进行登录,请先登录！")
+                          .setPositiveButton("去登录", new DialogInterface.OnClickListener() {
+                              @Override
+                              public void onClick(DialogInterface dialog, int which) {
+                                  startActivity(new Intent(getActivity(), LoginActivity.class));
+                                  getActivity().finish();
+                              }
+                          })
+                          .setNegativeButton("取消", (dialog, which) -> {
+
+                          });
+                  builder.create().show();
+
+              }else{
+                  startActivity(new Intent(getActivity(),ShoppingCartActivity.class));
+              }
+          }
+      });
     }
 }

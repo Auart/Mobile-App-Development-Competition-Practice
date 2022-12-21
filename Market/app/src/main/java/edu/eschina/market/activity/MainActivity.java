@@ -1,7 +1,6 @@
 package edu.eschina.market.activity;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
@@ -30,11 +29,6 @@ public class MainActivity extends BaseViewModelActivity<ActivityMainBinding> {
     protected void initData() {
         super.initData();
         userSharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
-        String auth_token = userSharedPreferences.getString("auth_token", null);
-        if (auth_token == null) {
-            startActivity(new Intent(this, LoginActivity.class));
-            finish();
-        }
         List<Fragment> fragmentList = new ArrayList<>();
         fragmentList.add(HomeFragment.newInstance());
         fragmentList.add(OrderFragment.newInstance());

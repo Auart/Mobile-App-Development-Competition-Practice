@@ -17,7 +17,9 @@ public class ShoppingDBHelper extends SQLiteOpenHelper {
                 "name varchar not null," +
                 "description varchar not null," +
                 "price varchar not null," +
-                "pic varchar not null);";
+                "pic varchar not null," +
+                "   " +
+                ");";
         db.execSQL(sql);
     }
 

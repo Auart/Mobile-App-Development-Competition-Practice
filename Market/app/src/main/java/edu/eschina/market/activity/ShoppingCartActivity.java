@@ -12,6 +12,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import edu.eschina.market.MyApplication;
 import edu.eschina.market.adapter.ShoppingCartAdapter;
 import edu.eschina.market.database.ShoppingDBHelper;
 import edu.eschina.market.databinding.ActivityShoppingCartBinding;
@@ -29,7 +31,6 @@ import okhttp3.Response;
 
 public class ShoppingCartActivity extends BaseViewModelActivity<ActivityShoppingCartBinding> {
     private ArrayList<Commodity> commodityList;
-    private double totalPrice;
 
     @Override
     protected void initViews() {
@@ -61,17 +62,19 @@ public class ShoppingCartActivity extends BaseViewModelActivity<ActivityShopping
             cursor.close();
             db.close();
         }
-
-        //将数据展示到页面上
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //将数据展示到页面上,并刷新
         ShoppingCartAdapter shoppingCartAdapter = new ShoppingCartAdapter(this, commodityList);
         viewBinding.cartList.setAdapter(shoppingCartAdapter);
         viewBinding.cartList.setSelection(0);
-        totalPrice = 0;
         for (int i = 0; i < commodityList.size(); i++) {
-            totalPrice += Double.parseDouble(commodityList.get(i).getProductPrice());
+            MyApplication.getInstance().price+= Float.parseFloat(commodityList.get(i).getProductPrice());
         }
-        viewBinding.initPrice.setText("￥" + totalPrice);
-        viewBinding.totalPrice.setText("￥" + totalPrice);
+        viewBinding.initPrice.setText("￥" + MyApplication.getInstance().price);
+        viewBinding.totalPrice.setText("￥" + MyApplication.getInstance().price);
     }
 
     @Override
@@ -79,8 +82,8 @@ public class ShoppingCartActivity extends BaseViewModelActivity<ActivityShopping
         super.initEvents();
         viewBinding.settle.setOnClickListener(v -> addOrder());
     }
-
     private void addOrder() {
+
         ArrayList<Products> products = new ArrayList<>();
         if (commodityList.size() != 0) {
             for (int i = 0; i < commodityList.size(); i++) {
@@ -91,7 +94,7 @@ public class ShoppingCartActivity extends BaseViewModelActivity<ActivityShopping
             Payload payload = new Payload();
             payload.setProducts(products);
             payload.setAuthToken(auth_token);
-            payload.setTotalPrice(String.valueOf(totalPrice));
+            payload.setTotalPrice(String.valueOf(MyApplication.getInstance().price));
             JSONObject jsonObject = new JSONObject();
             JSONArray jsonArray = new JSONArray();
             try {
@@ -100,7 +103,7 @@ public class ShoppingCartActivity extends BaseViewModelActivity<ActivityShopping
                 }
                 jsonObject.put("products", jsonArray);
                 jsonObject.put("auth_token", auth_token);
-                jsonObject.put("totalPrice", totalPrice);
+                jsonObject.put("totalPrice", MyApplication.getInstance().price);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -138,7 +141,7 @@ public class ShoppingCartActivity extends BaseViewModelActivity<ActivityShopping
                             db.execSQL("delete from shopping");
                             db.close();
                         }
-                        totalPrice=0;
+                        MyApplication.getInstance().price=0;
                     } catch (JSONException e) {
                         e.printStackTrace();
                         Toast.makeText(ShoppingCartActivity.this, "结算失败", Toast.LENGTH_SHORT).show();

@@ -1,9 +1,11 @@
 package edu.eschina.market.fragment;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
+import androidx.annotation.Nullable;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,10 +34,17 @@ public class OrderFragment extends BaseViewModelFragment<FragmentOrderBinding> {
         fragment.setArguments(args);
         return fragment;
     }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
     @Override
     protected void initView() {
         super.initView();
     }
+
     @Override
     protected void initData() {
         super.initData();
@@ -44,6 +53,7 @@ public class OrderFragment extends BaseViewModelFragment<FragmentOrderBinding> {
         String id = sharedPreferences.getString("id", "");
         loadNetwork(id, auth_token);
     }
+
     private void loadNetwork(String id, String token) {
         FormBody formBody = new FormBody.Builder()
                 .add("id", id)
@@ -57,14 +67,16 @@ public class OrderFragment extends BaseViewModelFragment<FragmentOrderBinding> {
                 .enqueue(new Callback() {
                     private String message;
                     private String json;
+
                     @Override
                     public void onFailure(@NotNull Call call, @NotNull IOException e) {
                     }
+
                     @Override
                     public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                         try {
                             json = response.body().string();
-                            Log.e("HomeFragment",json);
+                            Log.e("HomeFragment", json);
                             JSONObject jsonObject = new JSONObject(json);
                             JSONArray data = jsonObject.getJSONArray("data");
                             message = jsonObject.getString("message");
@@ -76,7 +88,7 @@ public class OrderFragment extends BaseViewModelFragment<FragmentOrderBinding> {
                                 String orderNames = "";
                                 for (int j = 0; j < orderDetails.length(); j++) {
                                     String productName = orderDetails.getJSONObject(j).getString("productName");
-                                    orderNames +=j+1+"."+productName;
+                                    orderNames += j + 1 + "." + productName;
                                 }
                                 orderList.add(new Order(orderNo, orderNames, orderTime));
                             }
@@ -86,7 +98,7 @@ public class OrderFragment extends BaseViewModelFragment<FragmentOrderBinding> {
                                 viewBinding.orderList.setSelection(0);
                             });
                         } catch (JSONException e) {
-                            getActivity().runOnUiThread(()-> Toast.makeText(getContext(),message,Toast.LENGTH_SHORT));
+                            getActivity().runOnUiThread(() -> Toast.makeText(getContext(), message, Toast.LENGTH_SHORT));
                             e.printStackTrace();
                         }
                     }

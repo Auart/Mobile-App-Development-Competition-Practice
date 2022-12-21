@@ -19,17 +19,34 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
+
     <ImageView
         android:id="@+id/action_cart"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@drawable/cart"
         android:clickable="true"
         android:focusable="true"
+        android:src="@drawable/cart"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/cart_count"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_marginStart="116dp"
+        android:layout_marginBottom="23dp"
+        android:background="@drawable/shape_oval"
+        android:text="0"
+        android:gravity="center"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.966"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.214" />
 </androidx.constraintlayout.widget.ConstraintLayout>
