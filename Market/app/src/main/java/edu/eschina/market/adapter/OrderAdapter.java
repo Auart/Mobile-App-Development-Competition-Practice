@@ -1,6 +1,7 @@
 package edu.eschina.market.adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +50,8 @@ public class OrderAdapter extends BaseAdapter {
         }
         viewHolder.orderNo.setText("订单编号："+orderList.get(position).getOrderNo());
         viewHolder.orderNames.setText(orderList.get(position).getOrderNames());
+        viewHolder.orderNames.setSingleLine(true);
+        viewHolder.orderNames.setEllipsize(TextUtils.TruncateAt.valueOf("END"));
         viewHolder.orderTime.setText("下单时间："+orderList.get(position).getOrderTime());
         return convertView;
 }

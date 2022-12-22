@@ -5,21 +5,24 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.Toast;
+import androidx.annotation.NonNull;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import edu.eschina.market.MyApplication;
 import edu.eschina.market.adapter.ShoppingCartAdapter;
 import edu.eschina.market.database.ShoppingDBHelper;
 import edu.eschina.market.databinding.ActivityShoppingCartBinding;
 import edu.eschina.market.model.Commodity;
-import edu.eschina.market.model.Payload;
-import edu.eschina.market.model.Products;
+import edu.eschina.market.model.Product;
 import edu.eschina.market.utils.Config;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -35,6 +38,15 @@ public class ShoppingCartActivity extends BaseViewModelActivity<ActivityShopping
     @Override
     protected void initViews() {
         super.initViews();
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("购物车");
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @SuppressLint("SetTextI18n")
@@ -63,6 +75,7 @@ public class ShoppingCartActivity extends BaseViewModelActivity<ActivityShopping
             db.close();
         }
     }
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onResume() {
         super.onResume();
@@ -73,8 +86,8 @@ public class ShoppingCartActivity extends BaseViewModelActivity<ActivityShopping
         for (int i = 0; i < commodityList.size(); i++) {
             MyApplication.getInstance().price+= Float.parseFloat(commodityList.get(i).getProductPrice());
         }
-        viewBinding.initPrice.setText("￥" + MyApplication.getInstance().price);
-        viewBinding.totalPrice.setText("￥" + MyApplication.getInstance().price);
+        viewBinding.initPrice.setText("￥" +new DecimalFormat("0.00").format(MyApplication.getInstance().price));
+        viewBinding.totalPrice.setText("￥" +new DecimalFormat("0.00").format(MyApplication.getInstance().price));
     }
 
     @Override
@@ -84,33 +97,29 @@ public class ShoppingCartActivity extends BaseViewModelActivity<ActivityShopping
     }
     private void addOrder() {
 
-        ArrayList<Products> products = new ArrayList<>();
+        ArrayList<Product> products = new ArrayList<>();
         if (commodityList.size() != 0) {
             for (int i = 0; i < commodityList.size(); i++) {
-                products.add(new Products(Long.parseLong(commodityList.get(i).getId()), 1));
+                products.add(new Product(commodityList.get(i).getId(), 1));
             }
             SharedPreferences user = getSharedPreferences("user", MODE_PRIVATE);
             String auth_token = user.getString("auth_token", "");
-            Payload payload = new Payload();
-            payload.setProducts(products);
-            payload.setAuthToken(auth_token);
-            payload.setTotalPrice(String.valueOf(MyApplication.getInstance().price));
             JSONObject jsonObject = new JSONObject();
-            JSONArray jsonArray = new JSONArray();
+            JSONObject productJsonObject = new JSONObject();
+            JSONArray productJsonArray = new JSONArray();
             try {
                 for (int i = 0; i < products.size(); i++) {
-                    jsonArray.put(products.get(i));
+                    productJsonObject.put("productId",products.get(i).getProductId());
+                    productJsonObject.put("productNum",products.get(i).getProductNum());
+                    productJsonArray.put(productJsonObject);
                 }
-                jsonObject.put("products", jsonArray);
+                jsonObject.put("products", productJsonArray);
                 jsonObject.put("auth_token", auth_token);
-                jsonObject.put("totalPrice", MyApplication.getInstance().price);
+                jsonObject.put("totalPrice",new DecimalFormat("0.00").format(MyApplication.getInstance().price));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            String json = jsonObject.toString().replaceAll("\\\\", "")
-                    .replaceAll("\\}\"", "}")
-                    .replaceAll("\"\\{", "{");
-            RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+            RequestBody body = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
             Request request = new Request.Builder()
                     .url(Config.ENDPOINT + "/order/add")
                     .method("POST", body)

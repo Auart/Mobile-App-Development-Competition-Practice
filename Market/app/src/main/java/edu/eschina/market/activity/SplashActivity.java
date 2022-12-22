@@ -28,6 +28,5 @@ public class SplashActivity extends BaseViewModelActivity<ActivitySplashBinding>
     @Override
     protected void initEvents() {
         super.initEvents();
-
     }
 }

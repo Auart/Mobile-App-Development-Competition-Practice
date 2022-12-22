@@ -1,10 +1,9 @@
 package edu.eschina.market.activity;
 import android.content.Intent;
 import android.os.Bundle;
-
+import android.view.MenuItem;
+import androidx.annotation.NonNull;
 import java.util.ArrayList;
-
-import edu.eschina.market.adapter.ProductAdapter;
 import edu.eschina.market.adapter.ProductListAdapter;
 import edu.eschina.market.databinding.ActivityProductListBinding;
 import edu.eschina.market.model.Commodity;
@@ -15,6 +14,17 @@ public class ProductListActivity  extends BaseViewModelActivity<ActivityProductL
     @Override
     protected void initViews() {
         super.initViews();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("商品列表");
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId()==android.R.id.home){
+            onBackPressed();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

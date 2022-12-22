@@ -10,8 +10,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
+
 import android.widget.Toast;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -19,7 +18,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
-
 import edu.eschina.market.activity.LoginActivity;
 import edu.eschina.market.activity.ProductDetailsActivity;
 import edu.eschina.market.activity.ProductListActivity;
@@ -76,8 +74,6 @@ public class HomeFragment extends BaseViewModelFragment<FragmentHomeBinding> {
         sharedPreferences = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
         auth_token = sharedPreferences.getString("auth_token", null);
         loadNetwork();
-
-
     }
 
 

@@ -39,11 +39,11 @@
 
         </activity>
         <activity android:name=".activity.ProductListActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+           >
 
         </activity>
         <activity android:name=".activity.ShoppingCartActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            >
 
         </activity>
         <activity android:name=".activity.SuccessfullyOrderedActivity"
